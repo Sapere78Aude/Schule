@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#3d8f24">
+<title>LernCraft – Deutschland-Quiz</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace;
+  background-color:#79553a;
+  background-image:
+    radial-gradient(circle at 4px 4px,#5f4127 2.5px,transparent 3px),
+    radial-gradient(circle at 12px 12px,#8a6540 2.5px,transparent 3px);
+  background-size:16px 16px;
+  color:#fff;min-height:100vh;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+#app{max-width:560px;margin:0 auto;padding:10px 10px 40px}
+.panel{background:#c6c6c6;color:#1d1d1d;border:3px solid #000;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #555;padding:12px;margin-bottom:12px}
+h1{margin:0;font-size:27px;color:#fff;text-shadow:3px 3px 0 #3f3f3f;letter-spacing:1px}
+h2{margin:0 0 8px;font-size:19px}
+h3{margin:14px 0 4px;font-size:16px;border-bottom:2px solid #8a8a8a;padding-bottom:3px}
+p,li{font-size:15px;line-height:1.45}
+ul{margin:6px 0;padding-left:20px}
+.title-row{display:flex;align-items:center;gap:10px}
+.grow{flex:1}
+.subtitle{font-size:12px;color:#f0f0f0;text-shadow:2px 2px 0 #3f3f3f}
+.hearts{font-size:22px;letter-spacing:2px;white-space:nowrap}
+.countdown{margin-top:8px;background:#2e2e2e;color:#ffe14a;border:3px solid #000;padding:8px 10px;text-align:center;font-weight:bold;font-size:15px;text-shadow:2px 2px 0 #000}
+.grass{height:24px;margin-top:8px;border:3px solid #000;background:
+  linear-gradient(#67c24a 0 45%,rgba(0,0,0,0) 45%),
+  radial-gradient(circle at 5px 16px,#5f4127 2px,transparent 2.5px),
+  radial-gradient(circle at 13px 20px,#8a6540 2px,transparent 2.5px),
+  #79553a;
+  background-size:auto,14px 14px,14px 14px,auto}
+.stats{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.level-badge{background:#2e2e2e;color:#b6ff8a;border:2px solid #000;padding:5px 8px;font-weight:bold;font-size:14px}
+.streak{background:#2e2e2e;color:#ffb14a;border:2px solid #000;padding:5px 8px;font-weight:bold;font-size:14px}
+.xpbar{height:18px;margin-top:8px;background:#000;border:2px solid #000;box-shadow:inset 2px 2px 0 rgba(255,255,255,.35)}
+.xpbar>div{height:100%;width:0;background:linear-gradient(#9dff70,#46c93e 55%,#2f9e2a);box-shadow:inset 0 3px 0 rgba(255,255,255,.55);transition:width .35s}
+.xplabel{margin-top:3px;font-size:13px;font-weight:bold;color:#fff;text-shadow:2px 2px 0 #3f3f3f;text-align:right}
+.creeper{width:64px;height:64px;flex:0 0 auto;position:relative;background:linear-gradient(135deg,#54b832,#3c8c22);box-shadow:0 0 0 3px #000,inset 4px 4px 0 rgba(255,255,255,.3),inset -4px -4px 0 rgba(0,0,0,.3)}
+.creeper i{position:absolute;top:0;left:0;width:8px;height:8px;box-shadow:
+  8px 8px 0 #111,16px 8px 0 #111,40px 8px 0 #111,48px 8px 0 #111,
+  8px 16px 0 #111,16px 16px 0 #111,40px 16px 0 #111,48px 16px 0 #111,
+  24px 24px 0 #111,32px 24px 0 #111,
+  16px 32px 0 #111,24px 32px 0 #111,32px 32px 0 #111,40px 32px 0 #111,
+  16px 40px 0 #111,40px 40px 0 #111,
+  16px 48px 0 #111,40px 48px 0 #111}
+.mc-btn{display:block;width:100%;margin:8px 0;padding:15px 10px;font-family:inherit;font-size:17px;font-weight:bold;color:#fff;text-shadow:2px 2px 0 #3f3f3f;background:#8b8b8b;border:3px solid #000;box-shadow:inset 3px 3px 0 rgba(255,255,255,.45),inset -3px -3px 0 rgba(0,0,0,.45);cursor:pointer;text-align:center;border-radius:0;min-height:54px}
+.mc-btn:active{transform:translate(2px,2px);box-shadow:inset -3px -3px 0 rgba(255,255,255,.2),inset 3px 3px 0 rgba(0,0,0,.5)}
+.mc-btn.green{background:linear-gradient(#6fce62,#3f9e38)}
+.mc-btn.gold{background:linear-gradient(#e3c34f,#b08d26)}
+.mc-btn.blue{background:linear-gradient(#5aa0d0,#35699e)}
+.mc-btn.red{background:linear-gradient(#d05a4e,#9e352b)}
+.mc-btn.small{min-height:40px;font-size:14px;padding:8px 10px;width:auto;display:inline-block}
+.best{display:block;font-size:12px;font-weight:normal;color:#ffe9a8;text-shadow:1px 1px 0 #3f3f3f}
+.screen{display:none}
+.screen.active{display:block}
+.quiz-meta{display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:8px}
+.timer-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.timer{flex:1;height:14px;background:#000;border:2px solid #000}
+.timer>div{height:100%;width:100%;background:linear-gradient(#6bc5ff,#2f7fd4)}
+#timerText{font-weight:bold;font-size:15px;min-width:46px;text-align:right}
+.boss-row{display:flex;align-items:center;gap:8px;font-weight:bold;font-size:14px;margin-top:6px}
+.boss-track{flex:1;height:14px;background:#000;border:2px solid #000}
+.boss-track>div{height:100%;width:100%;background:linear-gradient(#ff8a7a,#c22e1e);transition:width .3s}
+.quit-row{text-align:right;margin-top:6px}
+.question{font-size:20px;font-weight:bold;line-height:1.35;margin-bottom:12px;min-height:56px}
+.ans{text-align:left;background:#a5a5a5}
+.ans.correct{background:linear-gradient(#6fce62,#3f9e38)}
+.ans.wrong{background:linear-gradient(#e06a5a,#a83a30)}
+.ans:disabled{cursor:default;opacity:1}
+.feedback{margin-top:10px;padding:10px;border:3px solid #000;font-size:15px;line-height:1.45}
+.feedback.good{background:#d6f5c8}
+.feedback.bad{background:#f6d5cf}
+.feedback b{font-size:16px}
+#btnNext{margin-top:10px}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+#toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#2e2e2e;color:#ffe14a;border:3px solid #000;padding:10px 16px;font-weight:bold;font-size:15px;z-index:99;max-width:92%;text-align:center;box-shadow:4px 4px 0 rgba(0,0,0,.4)}
+table.sheet{width:100%;border-collapse:collapse;font-size:14px}
+table.sheet td{border:2px solid #8a8a8a;padding:5px 7px;background:#e8e8e8}
+table.sheet td+td{text-align:right}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="panel" style="background:#3d3d3d">
+    <div class="title-row">
+      <div class="creeper"><i></i></div>
+      <div class="grow">
+        <h1>LernCraft</h1>
+        <div class="subtitle">⛏️ Deutschland-Quiz · 4. Klasse</div>
+      </div>
+      <div class="hearts" id="hearts">❤️❤️❤️</div>
+    </div>
+    <div class="countdown" id="countdown">⏳ …</div>
+    <div class="grass"></div>
+    <div class="stats">
+      <div class="level-badge" id="levelBadge">🟢 Level 1 – Schleim</div>
+      <div class="streak" id="streak">🔥 Serie: 0 Tage</div>
+    </div>
+    <div class="xpbar"><div id="xpfill"></div></div>
+    <div class="xplabel" id="xplabel">0 XP</div>
+  </header>
+
+  <main>
+    <section id="screen-home" class="screen active">
+      <div class="panel">
+        <h2>🎮 Spiel-Modi</h2>
+        <button class="mc-btn green" data-mode="5min">⏱️ 5-Minuten-Runde<span class="best" id="best5"></span></button>
+        <button class="mc-btn gold" data-mode="10min">🔥 10-Minuten-Challenge<span class="best" id="best10"></span></button>
+        <button class="mc-btn blue" data-mode="endless">🎯 Alle Themen (Endlos)</button>
+        <button class="mc-btn red" data-mode="boss">👾 Bosskampf: Enderdrache<span class="best" id="bossWinsLabel"></span></button>
+        <button class="mc-btn" data-mode="sheet">📖 Spickzettel</button>
+      </div>
+      <div class="panel">
+        <h2>🧠 Themen-Quiz</h2>
+        <div id="topicButtons"></div>
+      </div>
+      <div class="panel">
+        <h2>📜 Regeln</h2>
+        <ul>
+          <li>✅ Richtig = <b>+10 XP</b> (ab Combo ×3: <b>+5 Bonus-XP</b>)</li>
+          <li>❌ Falsch = <b>1 Herz weg</b> (3 Herzen pro Runde); richtige Antwort + Erklärung wird angezeigt und die Frage kommt <b>später noch einmal</b> dran</li>
+          <li>🔥 Täglich spielen = Serie hochzählen &amp; <b>+25 XP Tagesbonus</b></li>
+          <li>Level: Schleim → Zombie → Skelett → Spinne → Creeper → Enderman → Ghast → Wither → <b>Enderdrache</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="screen-quiz" class="screen">
+      <div class="panel">
+        <div class="quiz-meta"><span id="quizTopic"></span><span id="quizCount"></span></div>
+        <div class="timer-row" id="timerWrap" style="display:none"><div class="timer"><div id="timerfill"></div></div><span id="timerText"></span></div>
+        <div class="boss-row" id="bossWrap" style="display:none"><span>👾 Boss-HP</span><div class="boss-track"><div id="bossfill"></div></div></div>
+        <div class="quit-row"><button class="mc-btn small" id="btnQuit">✖ Beenden</button></div>
+      </div>
+      <div class="panel">
+        <div class="question" id="question"></div>
+        <div id="answers"></div>
+        <div class="feedback" id="feedback" style="display:none">
+          <div id="feedbackText"></div>
+          <button class="mc-btn green" id="btnNext">Weiter ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-end" class="screen">
+      <div class="panel" style="text-align:center">
+        <h2 id="endTitle">Runde vorbei!</h2>
+        <div id="endStats" style="text-align:left;font-size:16px;line-height:1.6;margin:10px 0"></div>
+        <button class="mc-btn green" id="btnAgain">🔁 Nochmal spielen</button>
+        <button class="mc-btn" id="btnHome">🏠 Zum Menü</button>
+      </div>
+    </section>
+
+    <section id="screen-sheet" class="screen">
+      <div class="panel">
+        <h2>📖 Spickzettel: Deutschland</h2>
+        <div id="sheetContent"></div>
+      </div>
+      <button class="mc-btn" id="btnSheetBack">🏠 Zum Menü</button>
+    </section>
+  </main>
+  <div id="toast" style="display:none"></div>
+</div>
+
+<script>
+"use strict";
+/* ---------- Daten ---------- */
+const STATES=[["Baden-Württemberg","Stuttgart"],["Bayern","München"],["Berlin","Berlin"],["Brandenburg","Potsdam"],["Bremen","Bremen"],["Hamburg","Hamburg"],["Hessen","Wiesbaden"],["Mecklenburg-Vorpommern","Schwerin"],["Niedersachsen","Hannover"],["Nordrhein-Westfalen","Düsseldorf"],["Rheinland-Pfalz","Mainz"],["Saarland","Saarbrücken"],["Sachsen","Dresden"],["Sachsen-Anhalt","Magdeburg"],["Schleswig-Holstein","Kiel"],["Thüringen","Erfurt"]];
+const NEIGHBORS=[["Dänemark","im Norden"],["Polen","im Osten"],["Tschechien","im Südosten"],["Österreich","im Süden"],["Schweiz","im Süden/Südwesten"],["Frankreich","im Westen"],["Luxemburg","im Westen"],["Belgien","im Westen"],["Niederlande","im Nordwesten"]];
+const NON=["Schweden","Norwegen","Italien","Spanien","Ungarn","Kroatien","Griechenland","Türkei"];
+const CITIES=["Berlin","Hamburg","München","Köln","Frankfurt am Main","Stuttgart"];
+const CITY_DUMMY=["Bremen","Leipzig","Duisburg","Hannover","Nürnberg","Dresden"];
+const MOUNTAINS=["Alpen","Schwarzwald","Erzgebirge","Harz"];
+const TOPICS={
+  laender:{icon:"🗺️",name:"Bundesländer & Hauptstädte"},
+  nachbarn:{icon:"🌍",name:"Nachbarländer"},
+  staedte:{icon:"🏙️",name:"6 größte Städte"},
+  fluesse:{icon:"🌊",name:"Flüsse"},
+  gebirge:{icon:"⛰️",name:"Gebirge"},
+  fakten:{icon:"⭐",name:"Wichtige Fakten"}
+};
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pickN(arr,n,exclude){return shuffle(arr.filter(x=>exclude.indexOf(x)<0)).slice(0,n);}
+
+const QUESTIONS=[];
+function addQ(topic,q,correct,distr,expl){
+  const opts=shuffle([correct].concat(distr));
+  QUESTIONS.push({t:topic,q:q,a:opts,c:opts.indexOf(correct),e:expl});
+}
+
+const stateNames=STATES.map(s=>s[0]);
+const stateCaps=STATES.map(s=>s[1]);
+STATES.forEach(([s,c])=>{
+  addQ("laender","Welche Hauptstadt hat "+s+"?",c,pickN(stateCaps,3,[c]),"Die Hauptstadt von "+s+" ist "+c+".");
+  addQ("laender","Welches Bundesland hat die Hauptstadt "+c+"?",s,pickN(stateNames,3,[s]),c+" ist die Hauptstadt von "+s+".");
+});
+NEIGHBORS.forEach(([n,d])=>{
+  addQ("nachbarn","Welches Land grenzt "+d+" an Deutschland?",n,pickN(NON,3,[]),n+" grenzt "+d+" an Deutschland. Deutschland hat 9 Nachbarländer.");
+});
+addQ("nachbarn","Wie viele Nachbarländer hat Deutschland insgesamt?","9",["7","8","10"],"Deutschland hat 9 Nachbarländer: Dänemark, Polen, Tschechien, Österreich, Schweiz, Frankreich, Luxemburg, Belgien und die Niederlande.");
+(function(){
+  const all=NEIGHBORS.map(x=>x[0]);
+  const correctSet=shuffle(all.slice()).slice(0,5).sort().join(", ");
+  const distr=[];let guard=0;
+  while(distr.length<3&&guard<50){guard++;
+    const s=shuffle(all.slice()).slice(0,4).concat(pickN(NON,1,[])).sort().join(", ");
+    if(s!==correctSet&&distr.indexOf(s)<0)distr.push(s);
+  }
+  addQ("nachbarn","Du sollst 5 Nachbarländer von Deutschland nennen. Welche 5 stimmen?",correctSet,distr,"Nachbarländer von Deutschland: "+all.join(", ")+".");
+})();
+addQ("staedte","Welche Stadt ist die Hauptstadt und die größte Stadt Deutschlands?","Berlin",pickN(CITY_DUMMY,3,[]),"Berlin ist die Hauptstadt und die größte Stadt Deutschlands.");
+addQ("staedte","Welche Stadt ist nach Berlin die zweitgrößte Deutschlands?","Hamburg",["München","Köln","Frankfurt am Main"],"Nach Berlin ist Hamburg die zweitgrößte Stadt Deutschlands.");
+addQ("staedte","Welche Stadt ist die drittgrößte Deutschlands?","München",["Hamburg","Köln","Stuttgart"],"Die größten Städte: Berlin, Hamburg, München, Köln, Frankfurt am Main, Stuttgart.");
+addQ("staedte","Welche dieser Städte gehört NICHT zu den 6 größten Deutschlands?",pickN(CITY_DUMMY,1,[]),pickN(CITIES,3,[]),"Die 6 größten Städte: Berlin, Hamburg, München, Köln, Frankfurt am Main und Stuttgart.");
+addQ("staedte","In welcher Stadt steht das Brandenburger Tor?","Berlin",pickN(CITY_DUMMY,3,[]),"Das Brandenburger Tor steht in Berlin.");
+addQ("staedte","Wo liegt der größte Seehafen Deutschlands?","Hamburg",["Bremen","Rostock","Kiel"],"Der Hamburger Hafen ist der größte Seehafen Deutschlands.");
+addQ("fluesse","Welcher Fluss ist der längste in Deutschland?","Rhein",["Elbe","Donau","Main"],"Der Rhein ist der längste Fluss Deutschlands und mündet in die Nordsee.");
+addQ("fluesse","In welches Meer mündet der Rhein?","Nordsee",["Ostsee","Schwarzes Meer","Mittelmeer"],"Der Rhein mündet in die Nordsee.");
+addQ("fluesse","Welcher Fluss fließt durch Hamburg?","Elbe",["Rhein","Donau","Main"],"Die Elbe fließt durch Hamburg und mündet bei Cuxhaven in die Nordsee.");
+addQ("fluesse","Wo mündet die Elbe in die Nordsee?","Bei Cuxhaven",["Bei Bremen","Bei Rotterdam","Bei Kiel"],"Die Elbe mündet bei Cuxhaven in die Nordsee.");
+addQ("fluesse","Wo entspringt die Donau?","Im Schwarzwald",["In den Alpen","Im Harz","Im Erzgebirge"],"Die Donau entspringt im Schwarzwald und mündet ins Schwarze Meer.");
+addQ("fluesse","In welches Meer mündet die Donau?","Schwarzes Meer",["Nordsee","Ostsee","Mittelmeer"],"Die Donau mündet ins Schwarze Meer.");
+addQ("fluesse","In welchen Fluss mündet der Main?","In den Rhein (bei Mainz)",["In die Elbe","In die Donau","Direkt in die Nordsee"],"Der Main mündet bei Mainz in den Rhein.");
+addQ("gebirge","Welches Gebirge liegt im Süden Deutschlands an der Grenze zu Österreich und der Schweiz?","Alpen",["Harz","Erzgebirge","Schwarzwald"],"Die Alpen liegen im Süden Deutschlands – dort liegt auch die Zugspitze.");
+addQ("gebirge","Welches Gebirge liegt in Baden-Württemberg?","Schwarzwald",["Alpen","Harz","Erzgebirge"],"Im Schwarzwald (Baden-Württemberg) entspringt die Donau.");
+addQ("gebirge","Welches Gebirge liegt an der Grenze zu Tschechien?","Erzgebirge",["Harz","Alpen","Schwarzwald"],"Das Erzgebirge liegt im Osten an der Grenze zu Tschechien.");
+addQ("gebirge","In welchem Gebirge liegt der Brocken?","Harz",["Alpen","Schwarzwald","Erzgebirge"],"Der Brocken ist der höchste Berg des Harz (Niedersachsen/Sachsen-Anhalt).");
+addQ("gebirge","Welches dieser Gebirge liegt NICHT in Deutschland?","Kaukasus",["Alpen","Harz","Erzgebirge"],"In Deutschland liegen Alpen, Schwarzwald, Erzgebirge und Harz.");
+addQ("fakten","Wie heißt die Hauptstadt von Deutschland?","Berlin",["Hamburg","München","Köln"],"Berlin ist die Hauptstadt von Deutschland.");
+addQ("fakten","Wie viele Menschen leben ungefähr in Deutschland?","ca. 84 Millionen",["ca. 64 Millionen","ca. 74 Millionen","ca. 94 Millionen"],"In Deutschland leben ungefähr 84 Millionen Menschen.");
+addQ("fakten","Welche Farben hat die deutsche Flagge von oben nach unten?","Schwarz – Rot – Gold",["Rot – Schwarz – Gold","Gold – Rot – Schwarz","Schwarz – Gold – Rot"],"Die deutsche Flagge ist von oben: schwarz, rot, gold.");
+addQ("fakten","Wie heißt der höchste Berg Deutschlands?","Zugspitze",["Großglockner","Watzmann","Brocken"],"Die Zugspitze ist mit 2.962 m der höchste Berg Deutschlands.");
+addQ("fakten","Wie hoch ist die Zugspitze?","2.962 m",["2.662 m","3.962 m","1.962 m"],"Die Zugspitze ist 2.962 Meter hoch.");
+addQ("fakten","In welchem Gebirge liegt die Zugspitze?","Alpen",["Schwarzwald","Harz","Erzgebirge"],"Die Zugspitze liegt in den Alpen.");
+addQ("fakten","In welchem Bundesland liegt die Zugspitze?","Bayern",["Baden-Württemberg","Thüringen","Sachsen"],"Die Zugspitze liegt in Bayern, ganz im Süden an der Grenze zu Österreich.");
+addQ("fakten","Hamburg ist ein …","Stadtstaat",["Flächenland","Königreich","Landkreis"],"Hamburg ist ein Stadtstaat – genau wie Berlin und Bremen.");
+
+/* ---------- Level ---------- */
+const LEVELS=[
+  {xp:0,name:"Schleim",icon:"🟢"},
+  {xp:50,name:"Zombie",icon:"🧟"},
+  {xp:120,name:"Skelett",icon:"💀"},
+  {xp:220,name:"Spinne",icon:"🕷️"},
+  {xp:350,name:"Creeper",icon:"💥"},
+  {xp:520,name:"Enderman",icon:"👾"},
+  {xp:730,name:"Ghast",icon:"👻"},
+  {xp:980,name:"Wither",icon:"☠️"},
+  {xp:1300,name:"Enderdrache",icon:"🐉"}
+];
+function levelOf(xp){let l=0;LEVELS.forEach((L,i)=>{if(xp>=L.xp)l=i;});return l;}
+
+/* ---------- Speicher ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem("lerncraft_"+k);return v===null?d:JSON.parse(v);}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem("lerncraft_"+k,JSON.stringify(v));}catch(e){}}
+};
+let totalXP=store.get("xp",0);
+let streak=store.get("streak",0);
+let bossWins=store.get("bossWins",0);
+
+/* ---------- Sound (WebAudio) & Vibration ---------- */
+let AC=null;
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C();}if(AC&&AC.state==="suspended")AC.resume();return AC;}
+function tone(f,t0,d,type,v){try{const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type||"square";o.frequency.value=f;g.gain.setValueAtTime(v||0.15,a.currentTime+t0);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+0.03);}catch(e){}}
+function sndClick(){tone(440,0,0.06,"square",0.08);}
+function sndCorrect(){tone(523,0,0.12);tone(659,0.12,0.12);tone(784,0.24,0.22);}
+function sndWrong(){tone(220,0,0.2,"sawtooth",0.2);tone(150,0.16,0.3,"sawtooth",0.2);}
+function sndLevel(){[523,659,784,1046].forEach((f,i)=>tone(f,i*0.1,0.16));}
+function sndWin(){[523,659,784,1046,1318].forEach((f,i)=>tone(f,i*0.12,0.28,"triangle",0.2));}
+function sndLose(){tone(392,0,0.2,"sawtooth",0.18);tone(311,0.2,0.2,"sawtooth",0.18);tone(233,0.4,0.45,"sawtooth",0.18);}
+function buzz(p){try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+
+/* ---------- Zustand ---------- */
+const MODES={
+  "5min":{label:"5-Minuten-Runde",time:300},
+  "10min":{label:"10-Minuten-Challenge",time:600},
+  "endless":{label:"Alle Themen (Endlos)",time:0},
+  "boss":{label:"Bosskampf: Enderdrache",time:0,boss:true}
+};
+const S={mode:"5min",topic:null,queue:[],current:null,qi:0,correct:0,wrong:0,gained:0,hearts:3,combo:0,bestCombo:0,timeLeft:0,timer:null,bossHp:0,answered:false,lastMode:"5min",lastTopic:null};
+
+/* ---------- Helfer ---------- */
+function $(id){return document.getElementById(id);}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);}
+let toastTimer=null;
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display="none";},3500);}
+function addXP(n){
+  const before=levelOf(totalXP);
+  totalXP+=n;store.set("xp",totalXP);
+  const after=levelOf(totalXP);
+  if(after>before){sndLevel();buzz([60,60,60]);toast("🎉 Level aufgestiegen: "+LEVELS[after].icon+" Level "+(after+1)+" – "+LEVELS[after].name+"!");}
+}
+function renderHeader(){
+  const l=levelOf(totalXP),L=LEVELS[l];
+  $("levelBadge").textContent=L.icon+" Level "+(l+1)+" – "+L.name;
+  $("streak").textContent="🔥 Serie: "+streak+(streak===1?" Tag":" Tage");
+  $("xplabel").textContent=totalXP+" XP";
+  const next=LEVELS[l+1];
+  const pct=next?Math.min(100,Math.round((totalXP-L.xp)/(next.xp-L.xp)*100)):100;
+  $("xpfill").style.width=pct+"%";
+  let h="";for(let i=0;i<3;i++)h+=(i<S.hearts)?"❤️":"🖤";
+  $("hearts").textContent=h;
+}
+function renderCountdown(){
+  const exam=new Date(2026,10,26,0,0,0);
+  const days=Math.ceil((exam-new Date())/86400000);
+  const el=$("countdown");
+  if(days>1)el.textContent="⏳ Noch "+days+" Tage bis zur Klassenarbeit (26.11.2026)!";
+  else if(days===1)el.textContent="⏳ Morgen ist die Klassenarbeit (26.11.2026)!";
+  else if(days===0)el.textContent="🎒 Heute ist die Klassenarbeit – viel Erfolg!";
+  else el.textContent="✅ Klassenarbeit geschafft – gut gemacht!";
+}
+function renderBests(){
+  const b5=store.get("best5",0),b10=store.get("best10",0);
+  $("best5").textContent=b5>0?("🏆 Rekord: "+b5+" richtig"):"";
+  $("best10").textContent=b10>0?("🏆 Rekord: "+b10+" richtig"):"";
+  $("bossWinsLabel").textContent=bossWins>0?("👑 Boss-Kills: "+bossWins):"";
+}
+function daily(){
+  const now=new Date();
+  const ds=now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
+  const last=store.get("last",null);
+  if(last!==ds){
+    const y=new Date(now.getTime()-86400000);
+    const ys=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();
+    streak=(last===ys)?streak+1:1;
+    store.set("last",ds);store.set("streak",streak);
+    if(store.get("bonus",null)!==ds){
+      store.set("bonus",ds);
+      addXP(25);
+      toast("🎁 Tagesbonus: +25 XP! (Serie: "+streak+(streak===1?" Tag":" Tage")+")");
+    }
+  }
+}
+
+/* ---------- Lauf ---------- */
+function startRun(mode,topic){
+  S.mode=mode;S.topic=topic||null;
+  const pool=QUESTIONS.filter(q=>!topic||q.t===topic);
+  S.queue=shuffle(pool.slice());
+  S.qi=0;S.correct=0;S.wrong=0;S.gained=0;S.hearts=3;S.combo=0;S.bestCombo=0;S.answered=false;
+  S.bossHp=(mode==="boss")?100:0;
+  stopTimer();
+  const timed=MODES[mode].time>0;
+  $("timerWrap").style.display=timed?"flex":"none";
+  $("bossWrap").style.display=(mode==="boss")?"flex":"none";
+  if(timed){S.timeLeft=MODES[mode].time;startTimer();}
+  $("quizTopic").textContent=(topic?TOPICS[topic].icon+" "+TOPICS[topic].name:MODES[mode].label);
+  updateBoss();
+  show("screen-quiz");
+  renderHeader();
+  nextQuestion();
+}
+function startTimer(){
+  renderTimer();
+  S.timer=setInterval(()=>{
+    S.timeLeft--;
+    renderTimer();
+    if(S.timeLeft<=0)saveAndEnd("time");
+  },1000);
+}
+function stopTimer(){if(S.timer){clearInterval(S.timer);S.timer=null;}}
+function renderTimer(){
+  const total=MODES[S.mode].time||1;
+  const pct=Math.max(0,S.timeLeft/total*100);
+  const f=$("timerfill");
+  f.style.width=pct+"%";
+  f.style.background=S.timeLeft<=30?"linear-gradient(#ff7b6b,#d43a2a)":"linear-gradient(#6bc5ff,#2f7fd4)";
+  $("timerText").textContent=Math.floor(S.timeLeft/60)+":"+String(S.timeLeft%60).padStart(2,"0");
+}
+function updateBoss(){$("bossfill").style.width=Math.max(0,S.bossHp)+"%";}
+function nextQuestion(){
+  if(S.hearts<=0){saveAndEnd("hearts");return;}
+  if(S.queue.length===0){saveAndEnd("done");return;}
+  const q=S.queue.shift();
+  S.current=q;S.qi++;S.answered=false;
+  $("question").textContent=q.q;
+  $("quizCount").textContent="Frage "+S.qi;
+  const box=$("answers");box.innerHTML="";
+  q.a.forEach((ans,i)=>{
+    const b=document.createElement("button");
+    b.className="mc-btn ans";b.textContent=ans;
+    b.addEventListener("click",()=>answer(i,b));
+    box.appendChild(b);
+  });
+  $("feedback").style.display="none";
+}
+function answer(i,btn){
+  if(S.answered)return;
+  S.answered=true;
+  const q=S.current,ok=(i===q.c);
+  const buttons=document.querySelectorAll("#answers .ans");
+  buttons.forEach((b,idx)=>{b.disabled=true;if(idx===q.c)b.classList.add("correct");});
+  const fb=$("feedback"),fbText=$("feedbackText"),nextBtn=$("btnNext");
+  if(ok){
+    S.combo++;S.bestCombo=Math.max(S.bestCombo,S.combo);
+    const bonus=S.combo>=3?5:0;
+    const pts=10+bonus;
+    S.correct++;S.gained+=pts;addXP(pts);
+    sndCorrect();buzz([30]);
+    fbText.innerHTML="<b>✅ Richtig! +"+pts+" XP"+(bonus?" (🔥 Combo ×"+S.combo+", +"+bonus+" Bonus)":"")+"</b><br>"+q.e;
+    fb.className="feedback good";
+    if(S.mode==="boss"){
+      S.bossHp=Math.max(0,S.bossHp-20);updateBoss();
+      if(S.bossHp<=0){fb.style.display="block";nextBtn.style.display="none";setTimeout(()=>saveAndEnd("bosswin"),900);renderHeader();return;}
+    }
+  }else{
+    S.hearts--;S.combo=0;S.wrong++;renderHeader();
+    btn.classList.add("wrong");
+    sndWrong();buzz([80,40,80]);
+    document.querySelector("#screen-quiz .panel:last-child").classList.add("shake");
+    setTimeout(()=>document.querySelector("#screen-quiz .panel:last-child").classList.remove("shake"),450);
+    S.queue.push(q);
+    fbText.innerHTML="<b>❌ Falsch – ein Herz weg!</b><br>Richtig wäre: <b>"+q.a[q.c]+"</b><br>"+q.e;
+    fb.className="feedback bad";
+    if(S.hearts<=0){
+      fb.style.display="block";nextBtn.style.display="none";
+      setTimeout(()=>saveAndEnd("hearts"),1400);
+      return;
+    }
+  }
+  fb.style.display="block";
+  nextBtn.style.display="inline-block";
+  renderHeader();
+}
+function saveAndEnd(reason){
+  stopTimer();
+  let title="",extra="";
+  if(reason==="bosswin"){
+    bossWins++;store.set("bossWins",bossWins);
+    addXP(150);
+    title="👑 BOSS BESIEGT! +150 XP";
+    sndWin();buzz([100,60,100,60,200]);
+  }else if(reason==="hearts"){title="💔 Game Over – keine Herzen mehr!";sndLose();buzz([150,80,150]);}
+  else if(reason==="time"){title="⏰ Zeit abgelaufen!";sndLose();}
+  else if(reason==="quit"){title="Runde abgebrochen.";sndClick();}
+  else if(S.mode==="boss"){title="👾 Der Enderdrache hat überlebt – übe weiter!";sndLose();}
+  else{title="🏁 Super! Alle Fragen geschafft!";sndWin();}
+  if(S.mode==="5min"||S.mode==="10min"){
+    const key=S.mode==="5min"?"best5":"best10";
+    const b=store.get(key,0);
+    if(S.correct>b){store.set(key,S.correct);extra+="<br>🏆 Neuer Rekord: "+S.correct+" richtig!";}
+    else extra+="<br>Rekord: "+b+" richtig";
+  }
+  const l=levelOf(totalXP),L=LEVELS[l];
+  $("endTitle").textContent=title;
+  $("endStats").innerHTML=
+    "Modus: <b>"+MODES[S.mode].label+(S.topic?" – "+TOPICS[S.topic].name:"")+"</b><br>"+
+    "✅ Richtig: <b>"+S.correct+"</b> · ❌ Falsch: <b>"+S.wrong+"</b><br>"+
+    "⭐ XP in dieser Runde: <b>+"+S.gained+"</b><br>"+
+    "🔥 Bester Combo: ×"+S.bestCombo+"<br>"+
+    "Gesamt: <b>"+totalXP+" XP</b> · "+L.icon+" Level "+(l+1)+" – "+L.name+
+    (S.mode==="boss"?"<br>👑 Boss-Kills: <b>"+bossWins+"</b>":"")+extra;
+  S.lastMode=S.mode;S.lastTopic=S.topic;
+  renderBests();renderHeader();
+  show("screen-end");
+}
+function goHome(){S.hearts=3;renderHeader();show("screen-home");}
+
+/* ---------- Spickzettel ---------- */
+function buildSheet(){
+  let h="";
+  h+="<h3>🗺️ 16 Bundesländer + Hauptstädte</h3><table class='sheet'>";
+  STATES.forEach(([s,c])=>{h+="<tr><td>"+s+"</td><td><b>"+c+"</b></td></tr>";});
+  h+="</table>";
+  h+="<h3>🌍 9 Nachbarländer</h3><ul>";
+  NEIGHBORS.forEach(([n,d])=>{h+="<li><b>"+n+"</b> ("+d+")</li>";});
+  h+="</ul>";
+  h+="<h3>🏙️ 6 größte Städte</h3><p>"+CITIES.join(" · ")+"</p>";
+  h+="<h3>🌊 Flüsse</h3><ul>";
+  h+="<li><b>Rhein</b> – längster Fluss Deutschlands, mündet in die <b>Nordsee</b></li>";
+  h+="<li><b>Elbe</b> – fließt durch <b>Hamburg</b>, mündet bei <b>Cuxhaven</b> in die Nordsee</li>";
+  h+="<li><b>Donau</b> – entspringt im <b>Schwarzwald</b>, mündet ins <b>Schwarze Meer</b></li>";
+  h+="<li><b>Main</b> – mündet bei <b>Mainz</b> in den <b>Rhein</b></li></ul>";
+  h+="<h3>⛰️ Gebirge</h3><p>"+MOUNTAINS.join(" · ")+"</p>";
+  h+="<h3>⭐ Fakten</h3><ul>";
+  h+="<li>Hauptstadt: <b>Berlin</b></li>";
+  h+="<li>Einwohner: ca. <b>84 Millionen</b></li>";
+  h+="<li>Flagge (von oben): <b>schwarz – rot – gold</b></li>";
+  h+="<li>Höchster Berg: <b>Zugspitze, 2.962 m</b>, in den <b>Alpen</b> (Bayern)</li>";
+  h+="</ul>";
+  $("sheetContent").innerHTML=h;
+}
+
+/* ---------- Init ---------- */
+(function(){
+  const tb=$("topicButtons");
+  Object.keys(TOPICS).forEach(k=>{
+    const b=document.createElement("button");
+    b.className="mc-btn";
+    b.textContent=TOPICS[k].icon+" "+TOPICS[k].name;
+    b.addEventListener("click",()=>{sndClick();startRun("endless",k);});
+    tb.appendChild(b);
+  });
+  document.querySelectorAll("[data-mode]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      sndClick();
+      const m=b.getAttribute("data-mode");
+      if(m==="sheet")show("screen-sheet");
+      else startRun(m,null);
+    });
+  });
+  $("btnNext").addEventListener("click",()=>{sndClick();nextQuestion();});
+  $("btnQuit").addEventListener("click",()=>saveAndEnd("quit"));
+  $("btnAgain").addEventListener("click",()=>{sndClick();startRun(S.lastMode,S.lastTopic);});
+  $("btnHome").addEventListener("click",()=>{sndClick();goHome();});
+  $("btnSheetBack").addEventListener("click",()=>{sndClick();goHome();});
+  document.addEventListener("pointerdown",()=>{try{ac();}catch(e){}},{passive:true});
+  buildSheet();
+  daily();
+  renderCountdown();
+  setInterval(renderCountdown,60000);
+  renderBests();
+  renderHeader();
+})();
+</script>
+</body>
+</html>
